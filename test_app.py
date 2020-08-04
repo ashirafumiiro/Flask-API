@@ -171,7 +171,6 @@ def test_delete_with_key(client):
     }
     rv = client.delete('/delete', json=data, headers=headers)
     json_data = rv.get_json()
-
     assert rv.status_code == 200
 
 
