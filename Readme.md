@@ -20,11 +20,11 @@ Returns:
 - 500 for server error.
 - 403 for incorrect request. For a 403 response, return a json with a details field that contains information on what is wrong with the request
 
-`-/update` 
+`-/update/<id>` 
 
 Update game odds.
 Accepts json with the following fields: 
-league, home_team, away_team, home_team_win_odds, away_team_win_odds, draw_odds, game_date and saves this into a database  
+league, home_team, away_team, home_team_win_odds, away_team_win_odds, draw_odds, game_date and saves this into a database. The id is a unique value to select only one entry  
 Returns:
 - 200 if it succeeds
 - 500 for server error
