@@ -52,4 +52,4 @@ Returns:
   python -m pytest --cov=app
   ```  
   ## Running the app
-  The up is run usint the `flask run` command in the root directory containing the app.py file
+  The app is run using the `flask run` command in the root directory containing the app.py file
