@@ -19,6 +19,7 @@ test_data = {
 @pytest.fixture
 def client():
     db_fd, app.app.config['DATABASE'] = tempfile.mkstemp()
+    app.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+app.app.config['DATABASE']
     app.app.config['TESTING'] = True
     client = app.app.test_client()
 
@@ -93,11 +94,13 @@ def test_update_with_key(client):
         "draw_odds": 2, 
         "game_date": "2020-02-19",
     }
+    rv1 = client.post('/create', headers=headers, json=test_data)  # Create it
+    assert rv1.status_code == 200
     rv = client.put('/update/1', headers=headers,
                         json=data,)
-
-    assert rv.status_code == 404 #  index not found
-
+    assert rv.status_code == 200 
+    rv = client.put('/update/3', headers=headers, json=data)  # non existing
+    assert rv.status_code == 404 
 
 def test_update_with_key_500(client):
     data = {
@@ -109,6 +112,7 @@ def test_update_with_key_500(client):
         "draw_odds": 2, 
         "game_dates_wrong": "2020-02-18" # error in this parameter
     }
+    
     rv = client.put('/update/1', headers=headers,
                         json=data,)
     
@@ -156,7 +160,8 @@ def test_delete_without_key(client):
         "away_team": "Man City", 
         "game_date": "2020-02-19"
     }
-    rv = client.delete('/delete', json=data)
+    
+    rv = client.delete('/delete', json=test_data)
     json_data = rv.get_json()
 
     assert json_data['message'] == 'Valid Api key required'
@@ -169,10 +174,12 @@ def test_delete_with_key(client):
         "away_team": "Man City", 
         "game_date": "2020-02-19"
     }
-    rv = client.delete('/delete', json=data, headers=headers)
-    json_data = rv.get_json()
+    rv1 = client.post('/create', headers=headers, json=test_data)  # Create it
+    assert rv1.status_code == 200
+    rv = client.delete('/delete', json=data, headers=headers)  # Delete it
     assert rv.status_code == 200
-
+    rv = client.delete('/delete', json=data, headers=headers)  # Delete it
+    assert rv.status_code == 404 # now it's not there
 
 def test_delete_with_key_500(client):
     data = {
