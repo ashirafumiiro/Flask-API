@@ -84,8 +84,8 @@ def add_odd():
         db.session.add(new_odd)
         db.session.commit()
         return odd_schema.jsonify(new_odd)
-    except Exception:  # All other exception taken to be server error
-        return '', 500
+    except Exception as ex:  # All other exception taken to be server error
+        return str(ex), 500
     
 
 
@@ -102,8 +102,8 @@ def get_odds():
         odds = Odd.query.filter_by(league=league).filter(Odd.game_date>=from_date).filter(Odd.game_date<=to_date)
         results = odds_schema.dump(odds)
         return jsonify(results)
-    except Exception:  # internal server errors
-        return '', 500
+    except Exception as ex:  # internal server errors
+        return str(ex), 500
 
 #update
 @app.route('/update/<id>', methods=['PUT'])
@@ -111,8 +111,6 @@ def get_odds():
 def update_odd(id):
     try:
         odd = Odd.query.get(id)
-        if not odd:
-            return '', 404
 
         league = request.json['league'] 
         home_team = request.json['home_team'] 
@@ -122,7 +120,8 @@ def update_odd(id):
         draw_odds = request.json['draw_odds'] 
         game_date = request.json['game_date']
         date = datetime.datetime.strptime(game_date, "%Y-%m-%d").date()
-        
+        if not odd:
+            return '', 404
         odd.leage = league
         odd.home_team = home_team
         odd.away_team = away_team
@@ -156,7 +155,6 @@ def delete_odd():
         db.session.commit()
         return odd_schema.jsonify(odd_to_delete)
     except Exception:
-        raise Exception
         return '', 500
         
 
