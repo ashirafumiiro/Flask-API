@@ -41,5 +41,5 @@ Returns:
 - 403 for incorrect request. For a 403 response, return a json with a details field that contains information on what is wrong with the request  
 ## Badges
 [![Build Status](https://travis-ci.com/ashirafumiiro/Flask-API.svg?branch=master)](https://travis-ci.com/ashirafumiiro/Flask-API)  
-[![codecov](https://codecov.io/gh/ashirafumiiro/Flask-API/branch/master/graph/badge.svg)](https://codecov.io/gh/ashirafumiiro/Flask-API)
+[![codecov](https://codecov.io/gh/ashirafumiiro/Flask-API/branch/master/graph/badge.svg)](https://codecov.io/gh/ashirafumiiro/Flask-API)]
 
